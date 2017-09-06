@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans	
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/jee
+	http://www.springframework.org/schema/jee/spring-jee.xsd
+	http://www.springframework.org/schema/task 
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	
+	
+	<bean id="transactionProcesserJob"
+		class="com.greater.au.transaction.schduler.TransactionProcessScheduler">
+		<property name="transactionService" ref="transactionService" />
+	</bean>
+
+	<bean id="transactionService"
+		class="com.greater.au.transaction.service.impl.TransactionServiceImpl">
+		<property name="fileManager" ref="fileManager" />
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="customerAccountManager" ref="customerAccountManager" />
+		<property name="pendingDirectory" value="${processing.pendingDirectory}" />
+		<property name="reportsDirectory" value="${processing.reportsDirectory}" />
+		<property name="archiveDirectory" value="${processing.archiveDirectory}" />
+	</bean>
+
+	<bean id="customerAccountManager"
+		class="com.greater.au.transaction.manager.customer.impl.CustomerAccountManagerImpl" />
+	<bean id="fileManager"
+		class="com.greater.au.transaction.manager.file.impl.FileMangerImpl" />
+	<bean id="transactionManager"
+		class="com.greater.au.transaction.manager.transaction.impl.TransactionManagerImpl" />
+	<bean id="customerAccountService"
+		class="com.greater.au.transaction.service.impl.CustomerAccountServiceImpl">
+		<property name="customerAccountManager" ref="customerAccountManager" />
+	</bean>
+</beans>
